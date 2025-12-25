@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mercle Face ID Verification Demo - Secure identity verification powered by Mercle OAuth">
+    <meta name="theme-color" content="#6366f1">
+    <title>Mercle Auth Demo</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Background Effects -->
+        <div class="bg-gradient"></div>
+        <div class="bg-glow"></div>
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">Mercle Demo</span>
+            </div>
+            <button id="installBtn" class="install-btn hidden">
+                <span>📲</span> Install App
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="screen active">
+                <div class="card glass-card">
+                    <div class="card-icon pulse">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                            <path d="M12 13c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h1 class="card-title">Face ID Verification</h1>
+                    <p class="card-subtitle">Secure identity verification powered by Mercle</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <span class="feature-icon">🛡️</span>
+                            <span>Secure OAuth 2.0</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">👤</span>
+                            <span>Biometric Verification</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">⚡</span>
+                            <span>Instant Results</span>
+                        </div>
+                    </div>
+
+                    <button id="verifyBtn" class="primary-btn">
+                        <span class="btn-icon">🚀</span>
+                        Start Verification
+                    </button>
+                    
+                    <p class="disclaimer">By continuing, you agree to Mercle's Terms of Service</p>
+                </div>
+            </div>
+
+            <!-- Loading Screen -->
+            <div id="loadingScreen" class="screen">
+                <div class="card glass-card">
+                    <div class="loader">
+                        <div class="loader-ring"></div>
+                        <div class="loader-ring"></div>
+                        <div class="loader-ring"></div>
+                    </div>
+                    <h2 class="card-title">Processing</h2>
+                    <p id="loadingText" class="card-subtitle">Exchanging authorization code...</p>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div id="successScreen" class="screen">
+                <div class="card glass-card">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h1 class="card-title success-title">Verified!</h1>
+                    <p class="card-subtitle">Your identity has been confirmed</p>
+                    
+                    <div id="userInfo" class="user-info">
+                        <!-- User data will be populated here -->
+                    </div>
+
+                    <button id="logoutBtn" class="secondary-btn">
+                        <span>🔄</span> Start Over
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error Screen -->
+            <div id="errorScreen" class="screen">
+                <div class="card glass-card">
+                    <div class="error-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <h1 class="card-title error-title">Verification Failed</h1>
+                    <p id="errorText" class="card-subtitle">Something went wrong</p>
+                    
+                    <div id="errorDetails" class="error-details"></div>
+
+                    <button id="retryBtn" class="primary-btn">
+                        <span>🔄</span> Try Again
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>SDK Demo • <a href="https://mercle.ai" target="_blank">mercle.ai</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
