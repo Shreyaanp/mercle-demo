@@ -11,9 +11,9 @@ const CONFIG = {
     clientId: 'app_c4h14v5klle8izb0tauqxrrd',
     clientSecret: 'secret_WI6b0xqhZRRzZjHGJUmmOdt2JYQL3bif', // ⚠️ Exposed for demo only
     redirectUri: 'https://shreyaanp.github.io/mercle-demo/',
-    authEndpoint: 'https://id.mercle.ai/oauth/authorize',
-    tokenEndpoint: 'https://oauth.mercle.ai/token',          // Fixed: oauth.mercle.ai
-    userInfoEndpoint: 'https://oauth.mercle.ai/userinfo'     // Fixed: oauth.mercle.ai
+    authEndpoint: 'https://oauth.mercle.ai/authorize',       // Fixed: oauth.mercle.ai
+    tokenEndpoint: 'https://oauth.mercle.ai/token',
+    userInfoEndpoint: 'https://oauth.mercle.ai/userinfo'
 };
 
 // ========================================
@@ -174,9 +174,9 @@ async function handleCallback() {
         const tokenResponse = await fetch(CONFIG.tokenEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: JSON.stringify({
+            body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: code,
                 client_id: CONFIG.clientId,
