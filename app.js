@@ -12,8 +12,8 @@ const CONFIG = {
     clientSecret: 'secret_WI6b0xqhZRRzZjHGJUmmOdt2JYQL3bif', // ⚠️ Exposed for demo only
     redirectUri: 'https://shreyaanp.github.io/mercle-demo/',
     authEndpoint: 'https://id.mercle.ai/oauth/authorize',
-    tokenEndpoint: 'https://id.mercle.ai/oauth/token',
-    userInfoEndpoint: 'https://id.mercle.ai/oauth/userinfo'
+    tokenEndpoint: 'https://oauth.mercle.ai/token',          // Fixed: oauth.mercle.ai
+    userInfoEndpoint: 'https://oauth.mercle.ai/userinfo'     // Fixed: oauth.mercle.ai
 };
 
 // ========================================
@@ -57,7 +57,7 @@ function setLoadingText(text) {
  */
 function displayUserInfo(user, tokens) {
     const userInfoEl = document.getElementById('userInfo');
-    
+
     const fields = [
         { label: 'User ID', value: user.sub || 'N/A' },
         { label: 'Status', value: user.verified ? '<span class="verified-badge">✓ Verified</span>' : 'Not Verified' },
@@ -84,9 +84,9 @@ function displayUserInfo(user, tokens) {
 
     // Log full response for debugging
     console.log('Full user response:', user);
-    console.log('Tokens:', { 
+    console.log('Tokens:', {
         access_token: tokens.access_token ? '***' + tokens.access_token.slice(-10) : null,
-        id_token: tokens.id_token ? '***' + tokens.id_token.slice(-10) : null 
+        id_token: tokens.id_token ? '***' + tokens.id_token.slice(-10) : null
     });
 }
 
@@ -96,14 +96,14 @@ function displayUserInfo(user, tokens) {
 function showError(message, details = null) {
     document.getElementById('errorText').textContent = message;
     const errorDetails = document.getElementById('errorDetails');
-    
+
     if (details) {
         errorDetails.textContent = typeof details === 'object' ? JSON.stringify(details, null, 2) : details;
         errorDetails.style.display = 'block';
     } else {
         errorDetails.style.display = 'none';
     }
-    
+
     showScreen('errorScreen');
 }
 
@@ -119,15 +119,16 @@ function startVerification() {
     const state = generateRandomState();
     sessionStorage.setItem(STATE_KEY, state);
 
-    // Build authorization URL
+    // Build authorization URL with openid profile scope
     const authUrl = `${CONFIG.authEndpoint}?` +
         `client_id=${encodeURIComponent(CONFIG.clientId)}&` +
         `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&` +
         `response_type=code&` +
+        `scope=${encodeURIComponent('openid profile')}&` +
         `state=${encodeURIComponent(state)}`;
 
     console.log('Redirecting to:', authUrl);
-    
+
     // Redirect to Mercle for Face ID verification
     window.location.href = authUrl;
 }
@@ -173,9 +174,9 @@ async function handleCallback() {
         const tokenResponse = await fetch(CONFIG.tokenEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
-            body: new URLSearchParams({
+            body: JSON.stringify({
                 grant_type: 'authorization_code',
                 code: code,
                 client_id: CONFIG.clientId,
@@ -194,7 +195,7 @@ async function handleCallback() {
 
         // Step 4: Get user info
         setLoadingText('Fetching user information...');
-        
+
         const userResponse = await fetch(CONFIG.userInfoEndpoint, {
             headers: {
                 'Authorization': `Bearer ${tokens.access_token}`
@@ -251,7 +252,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 async function installPWA() {
     if (!deferredPrompt) return;
-    
+
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     console.log('Install prompt outcome:', outcome);
@@ -294,7 +295,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Check for OAuth callback
     const isCallback = await handleCallback();
-    
+
     // If not a callback, show welcome screen
     if (!isCallback) {
         showScreen('welcomeScreen');
