@@ -3,7 +3,7 @@
  * Enables offline support and caching
  */
 
-const CACHE_NAME = 'mercle-demo-v1';
+const CACHE_NAME = 'mercle-demo-v2';  // Bumped version to clear old cache
 const ASSETS = [
     './',
     './index.html',
